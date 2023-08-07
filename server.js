@@ -33,13 +33,13 @@ mongoose.connection
 ///////////////////////////////////////// 
 // MODELS /////////////////
 //////////////////////////////
-const CheeseSchema = new mongoose.Schema({
+const CheesesSchema = new mongoose.Schema({
     name: String,
     countryOfOrigin: String, 
     image: String,
 });
 
-const Cheese = mongoose.model("Cheese", CheeseSchema);
+const Cheeses = mongoose.model("Cheeses", CheesesSchema);
 
 ///////////////////////////////////////// 
 // MIDDLEWARE /////////////////
@@ -55,10 +55,10 @@ app.get("/", (req, res) => {
 });
 
 // CHEESE INDEX ROUTE
-app.get("/cheese", async (req, res) => {
+app.get("/cheeses", async (req, res) => {
     try {
         // send all cheese
-        res.json(await Cheese.find({}));
+        res.json(await Cheeses.find({}));
     } catch (error) {
         // send error
         res.status=(400).json(error);
@@ -66,10 +66,10 @@ app.get("/cheese", async (req, res) => {
 });
 
 // Cheese CREATE ROUTE
-app.post("/cheese", async (req, res) => {
+app.post("/cheeses", async (req, res) => {
     try {
         // send all cheese
-        res.json(await Cheese.create(req.body));
+        res.json(await Cheeses.create(req.body));
     } catch (error) {
         // send error
         res.status(400).json(error);
@@ -77,37 +77,32 @@ app.post("/cheese", async (req, res) => {
 });
 
 // Cheese UPDATE - PUT  /cheese/:id - update
-app.put("/cheese/:id", async (req, res) => {
+app.put("/cheeses/:id", async (req, res) => {
     try {
         // update cheese
-        const cheese = await
-        Cheese.findByIdAndUpdate(req.params.id, req.body, 
+        const cheeses = await
+        Cheeses.findByIdAndUpdate(req.params.id, req.body, 
             {
                 new: true
         });
         // send the updated cheese as json
-                res.json(cheese);
+                res.json(cheeses);
         } catch (error) {
             res.status(400).json({error});
         }
     })
 
 // DELETE ROUTE
-app.delete("/cheese/:id", async (req, res) => {
+app.delete("/cheeses/:id", async (req, res) => {
     try {
         // delete the cheese
-        const cheese = await Cheese.findByIdAndDelete(req.params.id)
+        const cheeses = await Cheeses.findByIdAndDelete(req.params.id)
         // send delayed cheese as json
-        res.status(204).json(cheese)
+        res.status(204).json(cheeses)
     } catch (error) {
         res.status(400).json({error});
     }
 });
-
-
-
-
-
 
 
 
