@@ -50,61 +50,75 @@ app.use(express.json()); // parse json bodies
 
 // ROUTES //////////
 // create test route
-app.get("/", (req, res) => {
-    res.send("hello, hello");
-});
+// app.get("/", (req, res) => {
+//     res.send("hello, hello");
+// });
 
-// CHEESE INDEX ROUTE
+// CHEESES INDEX ROUTE
 app.get("/cheeses", async (req, res) => {
     try {
-        // send all cheese
-        res.json(await Cheeses.find({}));
+        // fetch all cheeses from database
+        const cheeses = await Cheeses.find({});
+        // send json of all cheeses
+        res.json(cheeses);
     } catch (error) {
-        // send error
-        res.status=(400).json(error);
+        // send error s JSON
+        res.status(400).json({error});
     }
 });
 
 // Cheese CREATE ROUTE
 app.post("/cheeses", async (req, res) => {
     try {
-        // send all cheese
-        res.json(await Cheeses.create(req.body));
-    } catch (error) {
+        // create a new cheese
+        const cheese = await
+        Cheeses.create(req.body)
+        res.json(cheese);
+    } 
+    catch (error) {
         // send error
-        res.status(400).json(error);
+        res.status(400).json({error});
     }
+});
+
+// SHOW - GET - /cheeses/:id - get a single cheese
+app.get("/cheeses/:id", async (req, res) => {
+    try {
+        // get a cheese from the database
+        const cheese = await Cheeses.findById(req.params.id);
+        res.json(cheese);
+    } catch (error) {
+        res.status(400).json({error});
+        }
 });
 
 // Cheese UPDATE - PUT  /cheese/:id - update
 app.put("/cheeses/:id", async (req, res) => {
     try {
         // update cheese
-        const cheeses = await
+        const cheese = await
         Cheeses.findByIdAndUpdate(req.params.id, req.body, 
             {
-                new: true
+            new: true
         });
         // send the updated cheese as json
-                res.json(cheeses);
+            res.json(cheese);
         } catch (error) {
             res.status(400).json({error});
         }
     })
 
-// DELETE ROUTE
+// DESTROY - DELETE ROUTE
 app.delete("/cheeses/:id", async (req, res) => {
     try {
         // delete the cheese
-        const cheeses = await Cheeses.findByIdAndDelete(req.params.id)
-        // send delayed cheese as json
-        res.status(204).json(cheeses)
+        const cheese = await Cheeses.findByIdAndDelete(req.params.id)
+        // send deleted ed cheese as json
+        res.status(204).json(cheese)
     } catch (error) {
         res.status(400).json({error});
     }
 });
-
-
 
 // LISTENER ////////////
 app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
